@@ -2,6 +2,9 @@
 out
 *.iml
 log
+.gitignore
+README.md
+lesson
 
 
 
