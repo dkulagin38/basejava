@@ -1,5 +1,3 @@
-import sun.security.util.ArrayUtil;
-
 import java.util.Arrays;
 
 /**
@@ -30,39 +28,19 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        // I suppose the 'uuid' is an unique value. So the number of removing elements are always equal 1.
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                storage[i] = null;
-                // The case if all elements were removed. All elements equal null. 1 is a quantity of removed elements.
-                if (size == 1) return;
-                break;
+                System.arraycopy(storage, i + 1, storage, i, storage.length - 1 - i);
+                size--;
             }
         }
-
-        /* Move a removed value to the end of an actual array.
-         * The used method is similar to a bubble sort.
-         */
-        for (int i = size - 1; i > 0; i--) {
-            for (int j = 0; j < i; j++) {
-                if (storage[j] == null) {
-                    storage[j] = storage[j + 1];
-                    storage[j + 1] = null;
-                }
-            }
-        }
-        size--;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        /*
-        * The 'Arrays.copyOf' method was recommended in the webinar 'StartJava'.
-        * I didn't use that method because in this case I have to know a size of the non-null array.
-        */
-        return Arrays.stream(storage).filter(s -> (s != null)).toArray(Resume[]::new);
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
