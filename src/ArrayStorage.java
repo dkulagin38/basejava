@@ -7,44 +7,51 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    // Quantity of resumes
+    int size;
 
     void clear() {
-        for (int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
+        size = 0;
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                break;
-            }
-        }
+        storage[size] = r;
+        size++;
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                if (storage[i].uuid.equals(uuid)) return storage[i];
-            } else {
-                break;
-            }
+        for (int i = 0; i < size; i++) {
+            if (storage[i].uuid.equals(uuid)) return storage[i];
         }
         return null;
     }
 
     void delete(String uuid) {
-        Resume[] tempStorage = new Resume[storage.length];
-        int tempLength = 0;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                if (!storage[i].uuid.equals(uuid)) {
-                    tempStorage[tempLength++] = storage[i];
-                }
-            } else break;
+        // I suppose the 'uuid' is an unique value. So the number of removing elements are always equal 1.
+        for (int i = 0; i < size; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                storage[i] = null;
+                // The case if all elements were removed. All elements equal null. 1 is a quantity of removed elements.
+                if (size == 1) return;
+                break;
+            }
         }
-        storage = Arrays.copyOf(tempStorage, tempStorage.length);
+
+        /* Move a removed value to the end of an actual array.
+         * The used method is similar to a bubble sort.
+         */
+        for (int i = size - 1; i > 0; i--) {
+            for (int j = 0; j < i; j++) {
+                if (storage[j] == null) {
+                    storage[j] = storage[j + 1];
+                    storage[j + 1] = null;
+                }
+            }
+        }
+        size--;
     }
 
     /**
@@ -59,12 +66,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        int count = 0;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                count++;
-            } else break;
-        }
-        return count;
+        return size;
     }
 }
