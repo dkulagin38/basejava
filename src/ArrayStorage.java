@@ -8,29 +8,36 @@ public class ArrayStorage {
     // Quantity of resumes
     int size;
 
-    void clear() {
+    public void clear() {
         for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
         size = 0;
     }
 
-    void save(Resume r) {
+    public void update(Resume r) {
+        // TODO check if resume present
+        System.out.println("Error");
+    }
+
+    public void save(Resume r) {
+        // TODO check if resume not present
         storage[size] = r;
         size++;
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) return storage[i];
         }
         return null;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
+        // TODO check if resume present
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                System.arraycopy(storage, i + 1, storage, i, size - i);
+                System.arraycopy(storage, i + 1, storage, i, size - i - 1);
                 size--;
                 break;
             }
@@ -40,11 +47,11 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 }
