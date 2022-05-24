@@ -26,11 +26,12 @@ public class MainTestArrayStorage {
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
+        r2.setUuid("uuid23");
         ARRAY_STORAGE.update(r2);
         System.out.println("Update r2: " + ARRAY_STORAGE.get(r2.getUuid()));
 
         printAll();
-        ARRAY_STORAGE.delete(r3.getUuid());
+        ARRAY_STORAGE.delete(r1.getUuid());
         printAll();
         ARRAY_STORAGE.clear();
         printAll();

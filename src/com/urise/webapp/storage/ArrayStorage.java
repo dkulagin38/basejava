@@ -8,7 +8,8 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    protected static final int STORAGE_LIMIT = 10000;
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
     // Quantity of resumes
     private int size;
 
@@ -18,48 +19,43 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        if (indexOfResumeByUuid(r.getUuid()) >= 0) {
-            // Actually I didn't understand from the task what I have to do in this method.
-        } else {
+        int index = getIndex(r.getUuid());
+        if (index == -1) {
             System.out.println("Невозможно обновить резюме " + r + ", т.к. у него не найден uuid.");
+        } else {
+            storage[index] = r;
         }
     }
 
     public void save(Resume r) {
-        if (indexOfResumeByUuid(r.getUuid()) < 0) {
-            if (size < 1000) {
-                storage[size] = r;
-                size++;
-            } else {
-                System.out.println("Невозможно добавить резюме " + r + ", т.к. хранилище переполнено.");
-            }
-        } else {
+        // if (overflow) / else if (exist) / else (save)
+        if (size >= STORAGE_LIMIT) {
+            System.out.println("Невозможно добавить резюме " + r + ", т.к. хранилище переполнено.");
+        } else if (getIndex(r.getUuid()) >= 0) {
             System.out.println("Невозможно добавить резюме " + r + ", т.к. уже существует резюме с таким uuid.");
+        } else {
+            storage[size] = r;
+            size++;
         }
     }
 
     public Resume get(String uuid) {
-        int index = indexOfResumeByUuid(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
+        int index = getIndex(uuid);
+        if (index == -1) {
             System.out.println("Не найдено резюме с uuid " + uuid);
             return null;
         }
+        return storage[index];
     }
 
     public void delete(String uuid) {
-        int index = indexOfResumeByUuid(uuid);
-        if (index >= 0) {
-            /* So far, I've commented the code from the webinar because in this case
-            *  the last value from the array moves to somewhere in the middle of that array.
-            */
-            // storage[i] = storage[size - 1];
-            // storage[size - 1] = null;
-            System.arraycopy(storage, index + 1, storage, index, size - index);
-            size--;
-        } else {
+        int index = getIndex(uuid);
+        if (index == -1) {
             System.out.println("Невозможно удалить резюме с uuid " + uuid + ", т.к. такой uuid не существует.");
+        } else {
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
         }
     }
 
@@ -74,7 +70,7 @@ public class ArrayStorage {
         return size;
     }
 
-    private int indexOfResumeByUuid(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
