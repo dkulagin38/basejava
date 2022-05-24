@@ -28,7 +28,6 @@ public class ArrayStorage {
     }
 
     public void save(Resume r) {
-        // if (overflow) / else if (exist) / else (save)
         if (size >= STORAGE_LIMIT) {
             System.out.println("Невозможно добавить резюме " + r + ", т.к. хранилище переполнено.");
         } else if (getIndex(r.getUuid()) >= 0) {
