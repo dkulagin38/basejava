@@ -16,29 +16,8 @@ public class MainReflection {
         System.out.println(field.get(r));
         field.set(r, "new_uuid");
         System.out.println(r);
-
-        // TODO: invoke r.toString via reflection
-        // source: https://javadevblog.com/polnoe-rukovodstvo-po-java-reflection-api-refleksiya-na-primerah.html
-        String sample = r.toString();
-        Class clazz = r.getClass();
-        Method methods[] = r.getClass().getMethods();
-        for (Method method : methods) {
-            System.out.println(method.getName());
-            if (method.getName() == "toString") {
-                // An error is here: I don't know which correct parameters I have to use
-                Object invoke = method.invoke(null);
-                break;
-            }
-        }
-
-//        Class cls = r.getClass();
-//        // How can I know about parametersTypes?
-//        Method meth = cls.getMethod("toString", null);
-//        System.out.println("++");
-//        Object retobj = meth.invoke();
-//
-//        Class clazz = r.getClass();
-//        Method method = clazz.getDeclaredMethod("toString", String.class);
-//        System.out.println("++" + method.getName());
+        Method method = r.getClass().getMethod("toString");
+        Object invokeToString = method.invoke(r);
+        System.out.println(invokeToString.equals(r.toString()));
     }
 }
