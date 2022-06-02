@@ -8,3 +8,13 @@ lesson
 
 
 
+/BaseJava/lib/apiguardian-api-1.1.2.jar
+/BaseJava/lib/hamcrest-core-1.3.jar
+/BaseJava/lib/junit-4.13.1.jar
+/BaseJava/lib/junit-jupiter-5.8.1.jar
+/BaseJava/lib/junit-jupiter-api-5.8.1.jar
+/BaseJava/lib/junit-jupiter-engine-5.8.1.jar
+/BaseJava/lib/junit-jupiter-params-5.8.1.jar
+/BaseJava/lib/junit-platform-commons-1.8.1.jar
+/BaseJava/lib/junit-platform-engine-1.8.1.jar
+/BaseJava/lib/opentest4j-1.2.0.jar
