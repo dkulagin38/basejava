@@ -1,24 +1,20 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-
-import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractStorage implements Storage {
 
+/*
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     // Quantity of resumes
     protected int size;
+*/
 
-
-    @Override
+/*
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
@@ -26,9 +22,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         }
         return storage[index];
     }
+*/
 
+    public abstract Resume get(String uuid);
 
-    @Override
+/*
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
         if (size >= STORAGE_LIMIT) {
@@ -40,8 +38,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
             size++;
         }
     }
+*/
 
-    @Override
+    public abstract void save(Resume r);
+
+/*
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
@@ -52,8 +53,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
             size--;
         }
     }
+*/
 
-    @Override
+    public abstract void delete(String uuid);
+
+/*
     public void update(Resume r) {
         int index = getIndex(r.getUuid());
         if (index == -1) {
@@ -62,29 +66,40 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
             storage[index] = r;
         }
     }
+*/
 
-    @Override
+    public abstract void update(Resume r);
+
+/*
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
+*/
+    public abstract void clear();
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    @Override
+/*
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
+*/
 
-    @Override
-    public int size() {
-        return size;
-    }
+    public abstract Resume[] getAll();
+
+//    public int size() {
+//        return size;
+//    }
+
+    public abstract int size();
 
     protected abstract int getIndex(String uuid);
 
+/*
     protected abstract void insertElement(Resume r, int index);
 
     protected abstract void fillDeletedElement(int index);
+*/
 }
