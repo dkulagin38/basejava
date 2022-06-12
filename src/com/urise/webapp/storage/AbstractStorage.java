@@ -1,5 +1,7 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 /**
@@ -7,99 +9,60 @@ import com.urise.webapp.model.Resume;
  */
 public abstract class AbstractStorage implements Storage {
 
-/*
-    protected static final int STORAGE_LIMIT = 10000;
-    protected Resume[] storage = new Resume[STORAGE_LIMIT];
-    // Quantity of resumes
-    protected int size;
-*/
-
-/*
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
+        Object searchKey = getSearchKey(uuid);
+        boolean isExist = isExist(searchKey);
+        if (!isExist) {
             throw new NotExistStorageException(uuid);
         }
-        return storage[index];
+        return doGet(searchKey);
     }
-*/
 
-    public abstract Resume get(String uuid);
-
-/*
     public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (size >= STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", r.getUuid());
-        } else if (index >= 0) {
+        Object searchKey = getSearchKey(r.getUuid());
+        boolean isExist = isExist(searchKey);
+        if (isExist) {
             throw new ExistStorageException(r.getUuid());
-        } else {
-            insertElement(r, index);
-            size++;
         }
+        doSave(r, searchKey);
     }
-*/
 
-    public abstract void save(Resume r);
-
-/*
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
+        Object searchKey = getSearchKey(uuid);
+        boolean isExist = isExist(searchKey);
+        if (!isExist) {
             throw new NotExistStorageException(uuid);
-        } else {
-            fillDeletedElement(index);
-            storage[size - 1] = null;
-            size--;
         }
+        doDelete(searchKey);
     }
-*/
 
-    public abstract void delete(String uuid);
-
-/*
     public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index == -1) {
+        Object searchKey = getSearchKey(r.getUuid());
+        boolean isExist = isExist(searchKey);
+        if (!isExist) {
             throw new NotExistStorageException(r.getUuid());
-        } else {
-            storage[index] = r;
         }
+        doUpdate(r, searchKey);
     }
-*/
 
-    public abstract void update(Resume r);
-
-/*
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
-    }
-*/
     public abstract void clear();
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-/*
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-*/
-
     public abstract Resume[] getAll();
-
-//    public int size() {
-//        return size;
-//    }
 
     public abstract int size();
 
-    protected abstract int getIndex(String uuid);
+    public abstract Resume doGet(Object searchKey);
 
-/*
-    protected abstract void insertElement(Resume r, int index);
+    public abstract void doSave(Resume r, Object searchKey);
 
-    protected abstract void fillDeletedElement(int index);
-*/
+    public abstract void doDelete(Object searchKey);
+
+    public abstract void doUpdate(Resume r, Object searchKey);
+
+    protected abstract Integer getSearchKey(String uuid);
+
+    protected abstract boolean isExist(Object searchKey);
 }

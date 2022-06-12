@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -17,50 +15,31 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     // Quantity of resumes
     protected int size;
 
-
     @Override
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return storage[index];
+    public Resume doGet(Object searchKey) {
+        return storage[(Integer) searchKey];
     }
 
-
     @Override
-    public void save(Resume r) {
-        int index = getIndex(r.getUuid());
+    public void doSave(Resume r, Object searchKey) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
-        } else if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
         } else {
-            insertElement(r, index);
+            insertElement(r, (Integer) searchKey);
             size++;
         }
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            fillDeletedElement(index);
-            storage[size - 1] = null;
-            size--;
-        }
+    public void doDelete(Object searchKey) {
+        fillDeletedElement((Integer) searchKey);
+        storage[size - 1] = null;
+        size--;
     }
 
     @Override
-    public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index == -1) {
-            throw new NotExistStorageException(r.getUuid());
-        } else {
-            storage[index] = r;
-        }
+    public void doUpdate(Resume r, Object searchKey) {
+        storage[(Integer) searchKey] = r;
     }
 
     @Override
@@ -82,7 +61,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    protected abstract int getIndex(String uuid);
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return (Integer) searchKey >= 0;
+    }
 
     protected abstract void insertElement(Resume r, int index);
 
