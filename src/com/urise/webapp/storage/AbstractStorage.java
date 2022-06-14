@@ -29,13 +29,6 @@ public abstract class AbstractStorage implements Storage {
         doUpdate(r, searchKey);
     }
 
-    public abstract void clear();
-
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public abstract Resume[] getAll();
-
     public abstract int size();
 
     public abstract Resume doGet(Object searchKey);
